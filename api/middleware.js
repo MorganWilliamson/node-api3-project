@@ -19,9 +19,9 @@ const validateUserId = async (req, res, next) => {
         req.user = user;
         next();
     }
-}
+};
   
-  // validateUser()
+  // validateUser(): validates that new users have a name, returns a 400 otherwise. 
   
   
   // validatePost()
