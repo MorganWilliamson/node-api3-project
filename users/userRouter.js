@@ -47,31 +47,79 @@ const validatePost = async (req, res, next) => {
 ///// ENDPOINTS /////
 
 router.post('/', validateUser, (req, res) => {
-  
+  Posts.add(req.body)
+    .then((post) => {
+      res.status(201).json(post)
+    })
+    .catch((error) => {
+      res.status(500).json( error.message )
+    })
 });
 
 router.post('/:id/posts', validateUserId, validatePost, (req, res) => {
-  // do your magic!
+  Users.getUserPosts(req.params.id)
+    .then((posts) => {
+      res.status(200).json(posts);
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).json({ message: "Error retrieving the specified post." })
+    })
 });
 
 router.get('/', (req, res) => {
-  // do your magic!
+  Users.get(req.query)
+    .then((posts) => {
+      res.status(200).json(posts);
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).json({ message: "Error retrieving posts from the server." })
+    })
 });
 
 router.get('/:id', (req, res) => {
-  // do your magic!
+  Users.getById(req.params.id)
+    .then((post) => {
+      res.status(200).json(post)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).json({ message: "Error retrieving post by ID." })
+    })
 });
 
 router.get('/:id/posts', validateUserId, (req, res) => {
-  // do your magic!
+  Users.getUserPosts(req.params.id)
+    .then((userPosts) => {
+      res.status(200).json(userPosts)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).json({ message: "Could not get posts by specified user." })
+    })
 });
 
 router.delete('/:id', validateUserId, (req, res) => {
-  // do your magic!
+  Users.remove(req.params.id)
+    .then((user) => {
+      res.status(200).json(user)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).json({ message: "The specified user could not be removed." })
+    })
 });
 
 router.put('/:id', validateUserId, validateUser, (req, res) => {
-  // do your magic!
+  Users.update(req.user.id, req.body)
+    .then((user) => {
+      res.status(200).json(user)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).json({ message: "The specified user could not be updated." })
+    })
 });
 
 module.exports = router;
